@@ -400,6 +400,7 @@ class Tree {
   ContiguousArray<std::size_t> leaf_vector_end_;
   ContiguousArray<std::uint32_t> matching_categories_;
   ContiguousArray<std::size_t> matching_categories_offset_;
+  ContiguousArray<std::size_t> matching_categories_size_;
   bool has_categorical_split_{false};
 
   /* Note: the following member fields shall be re-computed at serialization time */
@@ -537,7 +538,7 @@ class Tree {
    */
   inline std::vector<std::uint32_t> MatchingCategories(int nid) const {
     const std::size_t offset_begin = matching_categories_offset_[nid];
-    const std::size_t offset_end = matching_categories_offset_[nid + 1];
+    const std::size_t offset_end = offset_begin + matching_categories_size_[nid];
     if (offset_begin >= matching_categories_.Size() || offset_end > matching_categories_.Size()) {
       // Return empty vector, to indicate the lack of any matching categories
       // The node might be a numerical split
